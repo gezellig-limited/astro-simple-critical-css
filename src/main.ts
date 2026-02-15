@@ -2,21 +2,10 @@ import type { AstroIntegration } from 'astro';
 import Beasties, { type Options as BeastieOptions } from 'beasties';
 import fastGlob, { type Options as FastGlobOptions } from 'fast-glob';
 import { readFile, writeFile } from 'node:fs/promises';
-import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export interface InlineCriticalCssOptions {
-    name?: string;
-    allowRules?: Array<string | RegExp>;
-    beastiesOptions?: Partial<BeastieOptions>;
-    globOptions?: FastGlobOptions;
-}
-
 const baseBeastiesOptions: BeastieOptions = {
-    fonts: true,
-    mergeStylesheets: false,
-    pruneSource: false,
-    logLevel: 'silent',
+    logLevel: 'info',
 };
 
 const baseGlobOptions: FastGlobOptions = {
@@ -39,24 +28,43 @@ export default function inlineCriticalCss(
         ...options.globOptions,
     };
 
+    let output: string;
+
     return {
         name: options.name ?? 'astro-simple-critical-css',
         hooks: {
-            'astro:build:done': async ({ dir }: { dir: URL | string }) => {
-                const cwd = typeof dir === 'string' ? dir : fileURLToPath(dir);
+            'astro:config:done': async ({ buildOutput }) => {
+                output = buildOutput;
+            },
+            'astro:build:done': async ({ dir, logger }) => {
+                if (output === 'server') {
+                    logger.warn(
+                        'Output is set to "server". Critical CSS inlining is not tested or supported. Continuing anyway...'
+                    );
+                }
+
+                const cwd = fileURLToPath(dir);
                 const htmlFiles = await fastGlob('**/*.html', {
-                    cwd,
+                    cwd: cwd,
                     ...globOptions,
                 });
 
+                if (htmlFiles.length === 0) {
+                    logger.warn(
+                        'No HTML files found. Critical CSS inlining skipped.'
+                    );
+                    return;
+                }
+
+                const beasties = new Beasties({
+                    ...{ logger },
+                    ...beastiesOptions,
+                    path: cwd,
+                });
                 for (const file of htmlFiles) {
                     const html = await readFile(file, 'utf8');
-                    const beasties = new Beasties({
-                        ...beastiesOptions,
-                        path: dirname(file),
-                    });
+                    logger.info(`Processing ${file}...`);
                     const criticalHtml = await beasties.process(html);
-                    console.log(`Inlined critical CSS for ${file}`);
                     await writeFile(file, criticalHtml, 'utf8');
                 }
             },
