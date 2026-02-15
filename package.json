@@ -1,0 +1,22 @@
+{
+    "name": "@gezellig/astro-simple-critical-css",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Simple Astro integration that inlines critical CSS via Beasties",
+    "main": "dist/main.js",
+    "types": "dist/main.d.ts",
+    "scripts": {
+        "build": "tsc"
+    },
+    "author": "Gezellig Limited",
+    "license": "ISC",
+    "dependencies": {
+        "astro": "^5.17.2",
+        "beasties": "^0.4.1",
+        "fast-glob": "^3.3.3"
+    },
+    "devDependencies": {
+        "@types/node": "^25.2.3",
+        "typescript": "^5.9.3"
+    }
+}
