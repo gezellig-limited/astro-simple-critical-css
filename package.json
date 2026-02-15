@@ -20,7 +20,10 @@
     "files": [
         "dist"
     ],
-    "repository": "github:gezellig-limited/astro-simple-critical-css",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/gezellig-limited/astro-simple-critical-css.git"
+    },
     "main": "dist/main.js",
     "types": "dist/main.d.ts",
     "scripts": {
