@@ -4,28 +4,19 @@ import fastGlob, { type Options as FastGlobOptions } from 'fast-glob';
 import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
-const baseBeastiesOptions: BeastieOptions = {
-    logLevel: 'info',
-};
+const baseBeastiesOptions: BeastieOptions = {};
 
-const baseGlobOptions: FastGlobOptions = {
-    absolute: true,
-};
-
-export default function inlineCriticalCss(
-    options: InlineCriticalCssOptions = {}
+export default function simpleCriticalCss(
+    options: Options = {}
 ): AstroIntegration {
-    const allowRules = options.allowRules;
-
     const beastiesOptions: BeastieOptions = {
         ...baseBeastiesOptions,
         ...options.beastiesOptions,
-        ...(allowRules !== undefined ? { allowRules } : {}),
     };
 
     const globOptions: FastGlobOptions = {
-        ...baseGlobOptions,
         ...options.globOptions,
+        ...{ absolute: true },
     };
 
     let output: string;
