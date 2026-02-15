@@ -1,22 +1,48 @@
 {
     "name": "@gezellig/astro-simple-critical-css",
-    "version": "1.0.0",
+    "version": "0.1.0",
+    "private": false,
     "type": "module",
-    "description": "Simple Astro integration that inlines critical CSS via Beasties",
+    "description": "Simple Astro integration that generates critical CSS using beasties and inlines it into the HTML.",
+    "keywords": [
+        "astro",
+        "astro-integration",
+        "critical css",
+        "performance",
+        "optimization",
+        "beasties",
+        "inline css"
+    ],
+    "homepage": "https://github.com/gezellig-limited/astro-simple-critical-css",
+    "bugs": {
+        "url": "https://github.com/gezellig-limited/astro-simple-critical-css/issues"
+    },
+    "files": [
+        "dist"
+    ],
+    "repository": "github:gezellig-limited/astro-simple-critical-css",
     "main": "dist/main.js",
     "types": "dist/main.d.ts",
     "scripts": {
-        "build": "tsc"
+        "build": "tsc",
+        "prepare": "npm run build"
     },
-    "author": "Gezellig Limited",
+    "author": {
+        "name": "Nathaniel Williams",
+        "email": "nathaniel@gezellig.limited",
+        "url": "https://gezellig.limited"
+    },
     "license": "ISC",
     "dependencies": {
-        "astro": "^5.17.2",
+        "astro": "^5",
         "beasties": "^0.4.1",
         "fast-glob": "^3.3.3"
     },
     "devDependencies": {
         "@types/node": "^25.2.3",
         "typescript": "^5.9.3"
+    },
+    "peerDependencies": {
+        "astro": "^5"
     }
 }
